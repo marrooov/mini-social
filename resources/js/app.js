@@ -4,7 +4,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 // Simple greeting function
 function showGreeting() {
-    alert('مرحبًا بك في MiniSocial! استمتع بتجربة التواصل الاجتماعي المستقبلية.');
+    alert('Welcome to MiniSocial! Enjoy the next-gen social experience.');
 }
 
 // Execute the function on page load

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Mini Social - منصة التواصل الاجتماعي</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -873,43 +874,43 @@
     </div>
 </header>
 
-<!-- القائمة الجانبية -->
+<!-- Sidebar -->
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 <div class="sidebar" id="sidebar">
     <ul class="list-group list-group-flush mt-4">
         <li class="list-group-item">
             <a href="/">
-                <i class="bi bi-house-door"></i>الرئيسية
+                <i class="bi bi-house-door"></i>Home
             </a>
         </li>
         <li class="list-group-item">
             <a href="/posts">
-                <i class="bi bi-file-earmark-post"></i>المنشورات
+                <i class="bi bi-file-earmark-post"></i>Posts
             </a>
         </li>
         <li class="list-group-item">
             <a href="/profile">
-                <i class="bi bi-person"></i>الملف الشخصي
+                <i class="bi bi-person"></i>Profile
             </a>
         </li>
         <li class="list-group-item">
             <a href="/search">
-                <i class="bi bi-search"></i>البحث
+                <i class="bi bi-search"></i>Search
             </a>
         </li>
         <li class="list-group-item">
             <a href="/notifications">
-                <i class="bi bi-bell"></i>الإشعارات
+                <i class="bi bi-bell"></i>Notifications
             </a>
         </li>
         <li class="list-group-item">
             <a href="/settings">
-                <i class="bi bi-gear"></i>الإعدادات
+                <i class="bi bi-gear"></i>Settings
             </a>
         </li>
         <li class="list-group-item">
             <a href="/logout">
-                <i class="bi bi-box-arrow-right"></i>تسجيل الخروج
+                <i class="bi bi-box-arrow-right"></i>Sign out
             </a>
         </li>
     </ul>
@@ -919,27 +920,27 @@
     @yield('content')
 </main>
 
-<!-- القائمة السفلية -->
+<!-- Bottom navigation -->
 <nav class="bottom-nav d-md-none">
     <div class="nav-item active">
         <i class="bi bi-house-door-fill"></i>
-        <span>الرئيسية</span>
+        <span>Home</span>
     </div>
     <div class="nav-item">
         <i class="bi bi-people"></i>
-        <span>الأصدقاء</span>
+        <span>Friends</span>
     </div>
     <div class="nav-item">
         <i class="bi bi-camera-video"></i>
-        <span>الفيديو</span>
+        <span>Videos</span>
     </div>
     <div class="nav-item">
         <i class="bi bi-bell"></i>
-        <span>الإشعارات</span>
+        <span>Notifications</span>
     </div>
     <div class="nav-item" onclick="toggleSidebar()">
         <i class="bi bi-list"></i>
-        <span>المزيد</span>
+        <span>More</span>
     </div>
 </nav>
 
@@ -1050,7 +1051,7 @@
             retina_detect: true
         });
 
-        // تأثيرات التمرير
+        // Scroll animations
         const fadeElements = document.querySelectorAll('.fade-in');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -1062,58 +1063,59 @@
         
         fadeElements.forEach(el => observer.observe(el));
         
-        // تفعيل أزرار الريأكتات
+        // Enable reaction buttons
         document.querySelectorAll('.fb-reaction').forEach(reaction => {
             reaction.addEventListener('click', function() {
                 const reactionType = this.dataset.reaction;
                 const mainReaction = this.closest('.fb-reaction-container').querySelector('.fb-main-reaction');
                 
-                // تغيير الزر الرئيسي حسب الريأكت المختار
+            // Update main reaction based on selection
                 mainReaction.innerHTML = '';
                 
                 let icon, text;
                 switch(reactionType) {
-                    case 'like':
-                        icon = '<i class="bi bi-hand-thumbs-up-fill" style="color: #1877F2;"></i>';
-                        text = 'إعجاب';
+                 
+                     case 'haha':
+                        icon = '<span style="font-size: 16px;">👍</span>';
+                        text = 'لايك';
                         break;
-                    case 'love':
-                        icon = '<i class="bi bi-heart-fill" style="color: #F3425F;"></i>';
+                    case 'wow':
+                        icon = '<span style="font-size: 16px;">❤️</span>';
                         text = 'حب';
                         break;
                     case 'haha':
                         icon = '<span style="font-size: 16px;">😄</span>';
-                        text = 'ضحك';
+                        text = 'Haha';
                         break;
                     case 'wow':
                         icon = '<span style="font-size: 16px;">😯</span>';
-                        text = 'دهشة';
+                        text = 'Wow';
                         break;
                     case 'sad':
                         icon = '<span style="font-size: 16px;">😢</span>';
-                        text = 'حزن';
+                        text = 'Sad';
                         break;
                     case 'angry':
                         icon = '<span style="font-size: 16px;">😡</span>';
-                        text = 'غضب';
+                        text = 'Angry';
                         break;
                 }
                 
                 mainReaction.innerHTML = `${icon} <span>${text}</span>`;
                 
-                // إخفاء صندوق الريأكتات بعد الاختيار
+                // Hide reactions box after selection
                 const reactionsBox = this.closest('.fb-reactions-box');
                 reactionsBox.style.opacity = '0';
                 reactionsBox.style.visibility = 'hidden';
                 
-                // زيادة عدد الريأكتات
+                // Increment reactions count
                 const statsElement = this.closest('.glass-card').querySelector('.reactions-count span');
                 let currentCount = parseInt(statsElement.textContent);
                 statsElement.textContent = currentCount + 1;
             });
         });
         
-        // إرسال التعليقات
+        // Submit comments
         document.querySelectorAll('.comment-submit').forEach(button => {
             button.addEventListener('click', function() {
                 const input = this.previousElementSibling;
@@ -1127,16 +1129,16 @@
                     const newComment = document.createElement('div');
                     newComment.className = 'comment';
                     newComment.innerHTML = `
-                        <div class="comment-avatar">أ</div>
+                        <div class="comment-avatar">Y</div>
                         <div class="comment-content">
-                            <div class="comment-author">أنت</div>
+                            <div class="comment-author">You</div>
                             <div class="comment-text">${commentText}</div>
                             <div class="comment-actions">
                                 <span class="comment-action" onclick="likeComment(this)">
-                                    <i class="bi bi-hand-thumbs-up"></i> إعجاب
+                                    <i class="bi bi-hand-thumbs-up"></i> Like
                                 </span>
-                                <span class="comment-action">رد</span>
-                                <span class="comment-action">الآن</span>
+                                <span class="comment-action">Reply</span>
+                                <span class="comment-action">Now</span>
                                 <span class="comment-action">0</span>
                             </div>
                         </div>
@@ -1145,15 +1147,15 @@
                     commentsContainer.parentNode.insertBefore(newComment, commentsContainer);
                     input.value = '';
                     
-                    // زيادة عدد التعليقات
+                    // Increment comments count
                     const commentsCount = this.closest('.glass-card').querySelector('.comments-count');
                     let currentCount = parseInt(commentsCount.textContent);
-                    commentsCount.textContent = (currentCount + 1) + ' تعليقات';
+                    commentsCount.textContent = (currentCount + 1) + ' comments';
                 }
             });
         });
         
-        // إدخال التعليقات بالضغط على Enter
+        // Submit comment with Enter
         document.querySelectorAll('.comment-input').forEach(input => {
             input.addEventListener('keypress', function(e) {
                 if(e.key === 'Enter') {
@@ -1162,7 +1164,7 @@
             });
         });
         
-        // تحميل الصور والفيديوهات للمنشورات الجديدة
+        // Upload images/videos for new posts
         const imageUpload = document.getElementById('imageUpload');
         const videoUpload = document.getElementById('videoUpload');
         const mediaPreview = document.getElementById('mediaPreview');
@@ -1172,7 +1174,7 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    mediaPreview.innerHTML = `<img src="${e.target.result}" alt="صورة المنشور">`;
+                    mediaPreview.innerHTML = `<img src="${e.target.result}" alt="Post image">`;
                     mediaPreview.style.display = 'block';
                 }
                 reader.readAsDataURL(file);
@@ -1184,14 +1186,14 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    mediaPreview.innerHTML = `<video controls><source src="${e.target.result}" type="${file.type}">متصفحك لا يدعم تشغيل الفيديو</video>`;
+                    mediaPreview.innerHTML = `<video controls><source src="${e.target.result}" type="${file.type}">Your browser does not support video playback</video>`;
                     mediaPreview.style.display = 'block';
                 }
                 reader.readAsDataURL(file);
             }
         });
         
-        // نشر منشور جديد
+        // Publish a new post
         const postSubmit = document.querySelector('.post-submit');
         const postInput = document.querySelector('.post-input');
         
@@ -1209,14 +1211,14 @@
             }
         });
 
-        // تحميل تفضيلات المستخدم
+        // Load user preferences
         const darkMode = localStorage.getItem('darkMode');
         if(darkMode === 'enabled'){
             document.body.classList.add('dark-mode');
         }
     });
     
-    // وظيفة تبديل القائمة الجانبية
+    // Toggle sidebar
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('sidebarOverlay');
@@ -1231,7 +1233,7 @@
         overlay.classList.remove('show');
     }
     
-    // وظيفة تبديل الوضع الداكن
+    // Toggle dark mode
     function toggleDarkMode() {
         const body = document.body;
         body.classList.toggle('dark-mode');
@@ -1243,7 +1245,7 @@
         }
     }
     
-    // عرض/إخفاء التعليقات
+    // Show/Hide comments
     function toggleComments(btn) {
         const commentsSection = btn.closest('.post-actions').nextElementSibling;
         if(commentsSection.style.display === 'block') {
@@ -1253,23 +1255,23 @@
         }
     }
     
-    // الإعجاب على التعليقات
+    // Like comments
     function likeComment(btn) {
         const likeCount = btn.nextElementSibling.nextElementSibling.nextElementSibling;
         let count = parseInt(likeCount.textContent);
         
         if(btn.classList.contains('comment-liked')) {
             btn.classList.remove('comment-liked');
-            btn.innerHTML = '<i class="bi bi-hand-thumbs-up"></i> إعجاب';
+            btn.innerHTML = '<i class="bi bi-hand-thumbs-up"></i> Like';
             likeCount.textContent = count - 1;
         } else {
             btn.classList.add('comment-liked');
-            btn.innerHTML = '<i class="bi bi-hand-thumbs-up-fill"></i> أعجبك';
+            btn.innerHTML = '<i class="bi bi-hand-thumbs-up-fill"></i> Liked';
             likeCount.textContent = count + 1;
         }
     }
     
-    // إنشاء منشور جديد
+    // Create a new post
     function createNewPost(text, media) {
         const postsContainer = document.querySelector('.container');
         const postElement = document.createElement('div');
@@ -1282,11 +1284,11 @@
         
         postElement.innerHTML = `
             <div class="post-header">
-                <div class="user-avatar glow-animation">م</div>
+                <div class="user-avatar glow-animation">M</div>
                 <div class="post-info">
-                    <h6>محمد أحمد</h6>
+                    <h6>Mohamed Ahmed</h6>
                     <div class="post-time">
-                        <i class="bi bi-globe"></i> الآن
+                        <i class="bi bi-globe"></i> Now
                     </div>
                 </div>
                 <i class="bi bi-three-dots" style="color: var(--text-muted); cursor: pointer;"></i>
@@ -1302,42 +1304,42 @@
                     <div class="reactions-icons">
                         <div class="reaction-icon" style="background-color: #1877F2;"></div>
                     </div>
-                    <span>۱</span>
+                    <span>1</span>
                 </div>
-                <div class="comments-count">۰ تعليقات</div>
+                <div class="comments-count">0 comments</div>
             </div>
             
             <div class="post-actions">
                 <div class="fb-reaction-container">
                     <div class="fb-main-reaction">
                         <i class="bi bi-hand-thumbs-up"></i>
-                        <span>إعجاب</span>
+                        <span>Like</span>
                     </div>
                     <div class="fb-reactions-box">
-                        <div class="fb-reaction like" title="إعجاب" data-reaction="like">👍</div>
-                        <div class="fb-reaction love" title="حب" data-reaction="love">❤️</div>
-                        <div class="fb-reaction haha" title="ضحك" data-reaction="haha">😄</div>
-                        <div class="fb-reaction wow" title="دهشة" data-reaction="wow">😯</div>
-                        <div class="fb-reaction sad" title="حزن" data-reaction="sad">😢</div>
-                        <div class="fb-reaction angry" title="غضب" data-reaction="angry">😡</div>
+                        <div class="fb-reaction like" title="Like" data-reaction="like">👍</div>
+                        <div class="fb-reaction love" title="Love" data-reaction="love">❤️</div>
+                        <div class="fb-reaction haha" title="Haha" data-reaction="haha">😄</div>
+                        <div class="fb-reaction wow" title="Wow" data-reaction="wow">😯</div>
+                        <div class="fb-reaction sad" title="Sad" data-reaction="sad">😢</div>
+                        <div class="fb-reaction angry" title="Angry" data-reaction="angry">😡</div>
                     </div>
                 </div>
                 
                 <div class="action-btn" onclick="toggleComments(this)">
                     <i class="bi bi-chat"></i>
-                    <span>تعليق</span>
+                    <span>Comment</span>
                 </div>
                 
                 <div class="action-btn">
                     <i class="bi bi-share"></i>
-                    <span>مشاركة</span>
+                    <span>Share</span>
                 </div>
             </div>
             
             <div class="comments-section">
                 <div class="add-comment">
-                    <input type="text" class="comment-input" placeholder="اكتب تعليقًا...">
-                    <button class="comment-submit">نشر</button>
+                    <input type="text" class="comment-input" placeholder="Write a comment...">
+                    <button class="comment-submit">Post</button>
                 </div>
             </div>
         `;
@@ -1360,27 +1362,27 @@
                     switch(reactionType) {
                         case 'like':
                             icon = '<i class="bi bi-hand-thumbs-up-fill" style="color: #1877F2;"></i>';
-                            text = 'إعجاب';
+                            text = 'Like';
                             break;
                         case 'love':
                             icon = '<i class="bi bi-heart-fill" style="color: #F3425F;"></i>';
-                            text = 'حب';
+                            text = 'Love';
                             break;
                         case 'haha':
                             icon = '<span style="font-size: 16px;">😄</span>';
-                            text = 'ضحك';
+                            text = 'Haha';
                             break;
                         case 'wow':
                             icon = '<span style="font-size: 16px;">😯</span>';
-                            text = 'دهشة';
+                            text = 'Wow';
                             break;
                         case 'sad':
                             icon = '<span style="font-size: 16px;">😢</span>';
-                            text = 'حزن';
+                            text = 'Sad';
                             break;
                         case 'angry':
                             icon = '<span style="font-size: 16px;">😡</span>';
-                            text = 'غضب';
+                            text = 'Angry';
                             break;
                     }
                     
@@ -1409,16 +1411,16 @@
                     const newComment = document.createElement('div');
                     newComment.className = 'comment';
                     newComment.innerHTML = `
-                        <div class="comment-avatar">أ</div>
+                        <div class="comment-avatar">Y</div>
                         <div class="comment-content">
-                            <div class="comment-author">أنت</div>
+                            <div class="comment-author">You</div>
                             <div class="comment-text">${commentText}</div>
                             <div class="comment-actions">
                                 <span class="comment-action" onclick="likeComment(this)">
-                                    <i class="bi bi-hand-thumbs-up"></i> إعجاب
+                                    <i class="bi bi-hand-thumbs-up"></i> Like
                                 </span>
-                                <span class="comment-action">رد</span>
-                                <span class="comment-action">الآن</span>
+                                <span class="comment-action">Reply</span>
+                                <span class="comment-action">Now</span>
                                 <span class="comment-action">0</span>
                             </div>
                         </div>
@@ -1429,7 +1431,7 @@
                     
                     const commentsCount = this.closest('.glass-card').querySelector('.comments-count');
                     let currentCount = parseInt(commentsCount.textContent);
-                    commentsCount.textContent = (currentCount + 1) + ' تعليقات';
+                    commentsCount.textContent = (currentCount + 1) + ' comments';
                 }
             });
             
